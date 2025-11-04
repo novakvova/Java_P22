@@ -20,11 +20,11 @@ public class Main {
     @Bean
     CommandLineRunner runner(IUserRepository repository) {
         return args -> {
-            UserEntity user = new UserEntity();
-            user.setUsername("admin");
-            user.setPassword("");
-            repository.save(user);
-            UserEntity saved = repository.findById(user.getId()).orElseThrow(NoSuchElementException::new);
+//            UserEntity user = new UserEntity();
+//            user.setUsername("admin");
+//            user.setPassword("");
+//            repository.save(user);
+//            UserEntity saved = repository.findById(user.getId()).orElseThrow(NoSuchElementException::new);
         };
     }
 }
