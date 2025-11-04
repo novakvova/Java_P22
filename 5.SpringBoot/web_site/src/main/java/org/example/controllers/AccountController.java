@@ -47,6 +47,9 @@ public class AccountController {
         boolean success = accountService.registerUser(username, password, fileName);
         if (success) {
             model.addAttribute("message", "Реєстрація успішна!");
+
+            return "redirect:/users";
+
         } else {
             model.addAttribute("message", "Користувач із таким іменем вже існує.");
         }

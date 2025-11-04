@@ -26,7 +26,7 @@
                 <td class="px-6 py-3 font-medium text-green-800" th:text="${user.username}"></td>
                 <td class="px-6 py-3 text-center">
                     <img th:if="${user.image != null}"
-                         th:src="@{'/images/' + ${user.image}}"
+                         th:src="@{'/images/medium/' + ${user.image}}"
                          alt="User Image"
                          class="mx-auto w-20 h-20 rounded-full object-cover ring-2 ring-green-300 shadow-sm">
                     <span th:if="${user.image == null}" class="text-gray-400">—</span>
