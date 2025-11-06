@@ -97,6 +97,9 @@
     </dependencies>
 
     <build>
+        <finalName>
+            p22
+        </finalName>
         <plugins>
             <plugin>
                 <groupId>org.springframework.boot</groupId>
