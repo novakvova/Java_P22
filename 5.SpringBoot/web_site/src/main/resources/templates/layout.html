@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html lang="uk"
-      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -11,14 +13,34 @@
 
 <nav class="bg-gradient-to-r from-green-500 to-emerald-600 text-white p-4 shadow-lg">
     <div class="container mx-auto flex justify-between items-center">
-        <a href="/" class="font-semibold text-lg hover:text-green-100 transition-colors duration-300">Spring сайт</a>
-        <div class="flex gap-6">
+        <a href="/" class="font-semibold text-lg hover:text-green-100 transition-colors duration-300">
+            Spring сайт
+        </a>
+
+        <div class="flex gap-6" sec:authorize="!isAuthenticated()">
             <a href="/" class="hover:text-green-100 transition">Головна</a>
-            <a href="/" class="hover:text-green-100 transition">Увійти</a>
+            <a href="/login" class="hover:text-green-100 transition">Увійти</a>
             <a href="/register" class="hover:text-green-100 transition">Реєстрація</a>
+        </div>
+
+        <div class="flex gap-4 items-center" sec:authorize="isAuthenticated()">
+
+            <img th:src="@{'/'+${uploadDir}+'/medium/' + ${#authentication.principal.image}}"
+                 alt="Фото профілю"
+                 class="w-10 h-10 rounded-full border border-white shadow-md"/>
+
+            <span class="font-medium" th:text="${#authentication.name}">Username</span>
+
+            <form th:action="@{/logout}" method="post">
+                <button type="submit"
+                        class="bg-white text-green-600 px-3 py-1 rounded hover:bg-green-100 transition">
+                    Вийти
+                </button>
+            </form>
         </div>
     </div>
 </nav>
+
 
 <main class="container mx-auto px-4 py-10 flex-grow" layout:fragment="content"></main>
 
