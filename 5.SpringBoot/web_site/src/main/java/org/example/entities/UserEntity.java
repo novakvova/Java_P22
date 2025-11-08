@@ -1,6 +1,7 @@
 package org.example.entities;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Email;
 import lombok.Data;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -23,11 +24,18 @@ public class UserEntity implements UserDetails {
     @Column(unique = true, nullable = false)
     private String username;
 
+    @Column(unique = true, nullable = false)
+    @Email(message = "Invalid email")
+    private String email;
+
     @Column(nullable = true, length = 200)
     private String image;
 
     @Column(nullable = false)
     private String password;
+
+    @Column(nullable = true)
+    private String resetPasswordToken;
 
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(

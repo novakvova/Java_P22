@@ -20,9 +20,4 @@ public class WebConfig implements WebMvcConfigurer {
         registry.addResourceHandler("/"+uploadDir+"/**")
                 .addResourceLocations("file:"+uploadDir+"/");
     }
-
-    @Bean
-    public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
-    }
 }
