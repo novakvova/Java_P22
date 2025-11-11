@@ -2,6 +2,7 @@ package org.example.data;
 
 import com.github.javafaker.Faker;
 import com.github.slugify.Slugify;
+import com.ibm.icu.text.Transliterator;
 import lombok.RequiredArgsConstructor;
 import org.example.data.constants.RolesConstants;
 import org.example.data.seed.CategorySeed;
@@ -66,7 +67,11 @@ public class AppDbSeeder {
             for(int i=0;i<5;i++){
                 CategorySeed seed = new CategorySeed();
                 seed.setName(faker.commerce().department());
-                seed.setSlug(slugify.slugify(seed.getName()));
+                Transliterator transliterator = Transliterator.getInstance("Cyrillic-Latin");
+                String latinText = transliterator.transliterate(seed.getName());
+                String slug = slugify.slugify(latinText);
+
+                seed.setSlug(slug);
                 seed.setImageUrl("https://loremflickr.com/640/480/");
                 CategoryEntity category = categoryMapper.toEntity(seed);
                 category.setImage(fileService.load(seed.getImageUrl()));
@@ -85,9 +90,13 @@ public class AppDbSeeder {
                 for (int i = 0; i < 12; i++) {
                     ProductSeed seed = new ProductSeed();
                     seed.setName(faker.commerce().productName());
-                    seed.setPrice(faker.number().randomDouble(2, 100, 2000));
+                    Transliterator transliterator = Transliterator.getInstance("Cyrillic-Latin");
+                    String latinText = transliterator.transliterate(seed.getName());
+                    String slug = slugify.slugify(latinText);
 
-                    seed.setSlug(slugify.slugify(seed.getName()));
+                    seed.setSlug(slug);
+                    seed.setPrice(faker.random().nextInt(1000, 10000));
+
                     seed.setDescription(faker.lorem().paragraph());
 
                     var randomCategory = categories.get(faker.random().nextInt(categories.size()));

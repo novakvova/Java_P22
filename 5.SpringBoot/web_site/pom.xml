@@ -134,6 +134,13 @@
             <version>3.0.7</version>
         </dependency>
 
+        <dependency>
+            <groupId>com.ibm.icu</groupId>
+            <artifactId>icu4j</artifactId>
+            <version>72.1</version> <!-- Make sure to check for the latest version -->
+        </dependency>
+
+
     </dependencies>
 
     <build>
