@@ -5,6 +5,8 @@ import lombok.Getter;
 import lombok.Setter;
 import net.bytebuddy.dynamic.loading.InjectionClassLoader;
 
+import java.util.List;
+
 @Entity
 @Setter
 @Getter
@@ -25,4 +27,7 @@ public class CategoryEntity {
 
     @Column
     private boolean isDeleted = false;
+
+    @OneToMany(mappedBy = "category", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<ProductEntity> products;
 }

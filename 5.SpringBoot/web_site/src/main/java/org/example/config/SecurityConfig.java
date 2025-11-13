@@ -24,7 +24,8 @@ public class SecurityConfig {
                                 "/css/**",
                                 "/" + uploadDir + "/**",
                                 "/forgot-password",
-                                "/reset-password"
+                                "/reset-password",
+                                "/products/list"
                         ).permitAll()
                         .anyRequest().authenticated()
                 )
