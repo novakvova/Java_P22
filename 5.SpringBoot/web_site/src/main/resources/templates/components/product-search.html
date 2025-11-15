@@ -1,0 +1,50 @@
+<div xmlns:th="http://www.thymeleaf.org" th:fragment="productSearchFragment">
+    <form th:action="@{/products/list}" method="get"
+          class="w-full max-w-3xl bg-gray-100 p-4 rounded-lg mb-6">
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <input type="text" name="name"
+                   th:value="${search.name}"
+                   placeholder="Назва"
+                   class="border p-2 rounded w-full"/>
+
+            <input type="text" name="slug"
+                   th:value="${search.slug}"
+                   placeholder="Slug"
+                   class="border p-2 rounded w-full"/>
+
+            <input type="text" name="description"
+                   th:value="${search.description}"
+                   placeholder="Опис"
+                   class="border p-2 rounded w-full"/>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-4">
+            <input type="number" name="minPrice" step="0.01"
+                   th:value="${search.minPrice}"
+                   placeholder="Мін. ціна"
+                   class="border p-2 rounded w-full"/>
+
+            <input type="number" name="maxPrice" step="0.01"
+                   th:value="${search.maxPrice}"
+                   placeholder="Макс. ціна"
+                   class="border p-2 rounded w-full"/>
+
+            <select name="categoryId" class="border p-2 rounded w-full">
+                <option value="">Всі категорії</option>
+                <option th:each="cat : ${categories}"
+                        th:value="${cat.id}"
+                        th:selected="${search.categoryId == cat.id}"
+                        th:text="${cat.name}">
+                </option>
+            </select>
+        </div>
+
+        <div class="mt-4 flex justify-end">
+            <button class="bg-green-600 text-white px-4 py-2 rounded">
+                Пошук
+            </button>
+        </div>
+    </form>
+
+</div>

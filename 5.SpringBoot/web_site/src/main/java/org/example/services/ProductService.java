@@ -7,15 +7,18 @@ import org.example.data.data_transfer_objects.common.PageResponseDTO;
 import org.example.data.data_transfer_objects.product.ProductCreateDTO;
 import org.example.data.data_transfer_objects.product.ProductItemDTO;
 import org.example.data.data_transfer_objects.product.ProductListItemDTO;
+import org.example.data.data_transfer_objects.search.ProductSearchDTO;
 import org.example.mappers.ProductMapper;
 import org.example.entities.CategoryEntity;
 import org.example.entities.ImageEntity;
 import org.example.entities.ProductEntity;
 import org.example.repositories.ICategoryRepository;
 import org.example.repositories.IProductRepository;
+import org.example.specifications.ProductSpecifications;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -76,9 +79,13 @@ public class ProductService {
     }
 
     @Transactional()
-    public PageResponseDTO<ProductListItemDTO> getAllPaginated(int page, int size) {
+    public PageResponseDTO<ProductListItemDTO> getAllPaginated(int page, int size,
+                                                               ProductSearchDTO searchDTO) {
         Pageable pageable = PageRequest.of(page-1, size);
-        Page<ProductEntity> productPage = productRepository.findAll(pageable);
+
+        Specification<ProductEntity> spec = ProductSpecifications.search(searchDTO);
+
+        Page<ProductEntity> productPage = productRepository.findAll(spec, pageable);
 
         List<ProductListItemDTO> content = productPage.getContent()
                 .stream()

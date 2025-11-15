@@ -1,0 +1,84 @@
+<div xmlns:th="http://www.thymeleaf.org">
+
+    <th:block th:fragment="pagination(page, params)">
+        <div th:if="${page != null && page.totalPages > 1}" class="mt-8 flex flex-col items-center gap-4">
+
+            <!-- Для двох сторінок -->
+            <th:block th:if="${page.totalPages == 2}">
+                <div class="flex items-center gap-2">
+                    <a th:href="@{|/products/list?page=1&size=${page.pageSize}${params}|}"
+                       th:class="${page.currentPage == 0} ? 'px-4 py-2 bg-green-600 text-white rounded-lg font-semibold' : 'px-4 py-2 bg-green-100 text-green-700 rounded-lg hover:bg-green-200 transition font-semibold'">
+                        1
+                    </a>
+                    <a th:href="@{|/products/list?page=2&size=${page.pageSize}${params}|}"
+                       th:class="${page.currentPage == 1} ? 'px-4 py-2 bg-green-600 text-white rounded-lg font-semibold' : 'px-4 py-2 bg-green-100 text-green-700 rounded-lg hover:bg-green-200 transition font-semibold'">
+                        2
+                    </a>
+                </div>
+            </th:block>
+
+            <!-- Для більше ніж двох сторінок -->
+            <th:block th:unless="${page.totalPages == 2}">
+                <div class="flex items-center gap-2">
+
+                    <!-- Попередня -->
+                    <a th:if="${page.hasPrevious}"
+                       th:href="@{|/products/list?page=${page.currentPage}&size=${page.pageSize}${params}|}"
+                       class="px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 transition font-semibold">
+                        ← Попередня
+                    </a>
+                    <span th:unless="${page.hasPrevious}" class="px-4 py-2 bg-gray-300 text-gray-500 rounded-lg cursor-not-allowed">
+                        ← Попередня
+                    </span>
+
+                    <div class="flex gap-2">
+                        <!-- Перша сторінка -->
+                        <a th:href="@{|/products/list?page=1&size=${page.pageSize}${params}|}"
+                           th:class="${0 == page.currentPage} ? 'px-4 py-2 bg-green-600 text-white rounded-lg font-semibold' : 'px-4 py-2 bg-green-100 text-green-700 rounded-lg hover:bg-green-200 transition font-semibold'"
+                           th:text="1"></a>
+
+                        <!-- Пропуск -->
+                        <span th:if="${page.currentPage > 2}" class="px-2 py-2 text-gray-500">...</span>
+
+                        <!-- Центральні сторінки -->
+                        <th:block th:each="pageNum : ${#numbers.sequence(T(java.lang.Math).max(1, page.currentPage - 1), T(java.lang.Math).min(page.totalPages - 2, page.currentPage + 1))}">
+                            <a th:href="@{|/products/list?page=${pageNum + 1}&size=${page.pageSize}${params}|}"
+                               th:class="${pageNum == page.currentPage} ? 'px-4 py-2 bg-green-600 text-white rounded-lg font-semibold' : 'px-4 py-2 bg-green-100 text-green-700 rounded-lg hover:bg-green-200 transition font-semibold'"
+                               th:text="${pageNum + 1}"></a>
+                        </th:block>
+
+                        <!-- Пропуск перед останньою -->
+                        <span th:if="${page.currentPage < page.totalPages - 3}" class="px-2 py-2 text-gray-500">...</span>
+
+                        <!-- Остання сторінка -->
+                        <a th:if="${page.totalPages > 1}"
+                           th:href="@{|/products/list?page=${page.totalPages}&size=${page.pageSize}${params}|}"
+                           th:class="${(page.totalPages - 1) == page.currentPage} ? 'px-4 py-2 bg-green-600 text-white rounded-lg font-semibold' : 'px-4 py-2 bg-green-100 text-green-700 rounded-lg hover:bg-green-200 transition font-semibold'"
+                           th:text="${page.totalPages}"></a>
+                    </div>
+
+                    <!-- Наступна -->
+                    <a th:if="${page.hasNext}"
+                       th:href="@{|/products/list?page=${page.currentPage + 2}&size=${page.pageSize}${params}|}"
+                       class="px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 transition font-semibold">
+                        Наступна →
+                    </a>
+                    <span th:unless="${page.hasNext}" class="px-4 py-2 bg-gray-300 text-gray-500 rounded-lg cursor-not-allowed">
+                        Наступна →
+                    </span>
+                </div>
+            </th:block>
+
+            <!-- Інформація про сторінку -->
+            <div class="text-sm text-gray-600 mt-2">
+                <span>Сторінка <span th:text="${page.currentPage + 1}">1</span> з <span th:text="${page.totalPages}">1</span></span>
+                <span class="mx-2">|</span>
+                <span>Всього товарів: <span th:text="${page.totalElements}">0</span></span>
+                <span class="mx-2">|</span>
+                <span>На сторінці: <span th:text="${page.pageSize}">12</span></span>
+            </div>
+
+        </div>
+    </th:block>
+
+</div>
