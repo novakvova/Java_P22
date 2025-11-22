@@ -4,10 +4,10 @@ import MainFooter from "./MainFooter.tsx";
 
 export const MainLayout = () => {
     return (
-        <div className={"container mx-auto"}>
+        <div className={"mx-auto bg-[var(--bg)] text-[var(--fg)]"}>
             <MainHeader />
 
-            <main>
+            <main className="py-5 transition-colors">
                 <Outlet />
             </main>
 

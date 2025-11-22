@@ -1,5 +1,54 @@
 @import "tailwindcss";
 
 :root {
-    color-scheme: light dark;
+    color-scheme: light;
+}
+
+html.light {
+    --bg: white;
+    --fg: #1f2937;
+}
+
+html.dark {
+    --bg: #111827;
+    --fg: #f3f4f6;
+}
+
+html.pink {
+    --bg: #ffe4ef;
+    --fg: #831843;
+}
+
+html.red {
+    --bg: #923434;
+    --fg: #d7c4c4;
+}
+
+html.ukraine {
+    --bg: #a7a12a;
+    --fg: #ffffff;
+}
+
+html.dracula {
+    --bg: #342e41;
+    --fg: #8039d1;
+}
+
+/* SELECT */
+select {
+    background: var(--bg);
+    color: var(--fg);
+    border-color: var(--fg);
+}
+
+/* OPTION */
+option {
+    background: var(--bg) !important;
+    color: var(--fg) !important;
+}
+
+/* Для Firefox (бо він любить робити своє) */
+select:-moz-focusring {
+    color: transparent;
+    text-shadow: 0 0 0 var(--fg);
 }

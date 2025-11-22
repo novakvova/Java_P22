@@ -1,15 +1,49 @@
 import {Link} from "react-router";
+import {type RootState, useAppDispatch, useAppSelector} from "../../store";
+import {setTheme, type ThemeType} from "../../store/themeSlice.ts";
+import changeTheme from "../../utils/changeTheme.ts";
 
 export const MainHeader = () => {
+
+    const dispatch = useAppDispatch();
+    const theme = useAppSelector((state: RootState) => state.theme.theme);
+
+    changeTheme(theme);
+
+    const handleChangeTheme = (e: React.ChangeEvent<HTMLSelectElement>) => {
+        dispatch(setTheme(e.target.value as ThemeType));
+    };
+
     return (
         <>
-            <nav className="bg-neutral-primary dark:bg-gray-900 w-full border-b border-default">
+            <nav className="bg-neutral-primary w-full border-b border-default">
                 <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
                     <Link to={"/"} className="flex items-center space-x-3 rtl:space-x-reverse">
                         <img src="https://flowbite.com/docs/images/logo.svg" className="h-7" alt="Flowbite Logo"/>
                         <span
                             className="self-center text-xl text-heading font-semibold whitespace-nowrap">Bogdan-bus</span>
                     </Link>
+
+                    <select
+                        value={theme}
+                        onChange={handleChangeTheme}
+                        className="
+
+                        px-3 py-1.5 rounded-lg text-sm font-medium
+                        bg-neutral-secondary-soft
+                        border border-neutral-tertiary
+                        focus:outline-none focus:ring-2 focus:ring-blue-500
+                        hover:bg-neutral-secondary
+                        transition
+                      "
+                    >
+                        <option value="light">Light</option>
+                        <option value="dark">Dark</option>
+                        <option value="pink">Pink</option>
+                        <option value="ukraine">Ukraine</option>
+                        <option value="dracula">Lavender</option>
+                    </select>
+
                     <button data-collapse-toggle="navbar-default" type="button"
                             className="inline-flex items-center p-2 w-10 h-10 justify-center text-sm text-body rounded-base md:hidden hover:bg-neutral-secondary-soft hover:text-heading focus:outline-none focus:ring-2 focus:ring-neutral-tertiary"
                             aria-controls="navbar-default" aria-expanded="false">
