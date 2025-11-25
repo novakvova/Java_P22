@@ -12,11 +12,14 @@
   "dependencies": {
     "@reduxjs/toolkit": "^2.10.1",
     "@tailwindcss/vite": "^4.1.17",
+    "antd": "^6.0.0",
+    "antd-img-crop": "^4.27.0",
     "object-to-formdata": "^4.5.1",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
     "react-redux": "^9.2.0",
     "react-router": "^7.9.6",
+    "react-router-dom": "^7.9.6",
     "tailwindcss": "^4.1.17"
   },
   "devDependencies": {
