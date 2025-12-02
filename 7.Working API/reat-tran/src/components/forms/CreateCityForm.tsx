@@ -7,16 +7,17 @@ import InputField from "../inputs/InputField.tsx";
 import FileUploadField from "../inputs/FileUploadField.tsx";
 import BaseButton from "../inputs/BaseButton.tsx";
 import SelectField from "../inputs/SelectField.tsx";
-import { Editor } from "@tinymce/tinymce-react";
+// import { Editor } from "@tinymce/tinymce-react";
 import type {ICityCreate} from "../../types/location/ICityCreate.ts";
 import {APP_ENV} from "../../env";
-import {useSaveImageMutation} from "../../services/fileService.ts";
+// import {useSaveImageMutation} from "../../services/fileService.ts";
+import CityDescriptionEditor from "../inputs/CityDescriptionEditor.tsx";
 
 const CreateCityForm: React.FC = () => {
     const navigate = useNavigate();
     const [createCity, { isLoading }] = useCreateCityMutation();
     const { data: countries = [] } = useGetCountriesQuery();
-    const [saveImage] = useSaveImageMutation();
+    // const [saveImage] = useSaveImageMutation();
 
     const [formValues, setFormValues] = useState<ICityCreate>({
         name: "",
@@ -30,6 +31,7 @@ const CreateCityForm: React.FC = () => {
         avgMealPrice: undefined,
         avgHotelPrice: undefined,
         hasRecreationalWater: false,
+        descriptionImageIds: []
     });
 
     const [file, setFile] = useState<File | null>(null);
@@ -45,9 +47,9 @@ const CreateCityForm: React.FC = () => {
         }));
     };
 
-    const handleDescriptionChange = (content: string) => {
-        setFormValues((prev) => ({ ...prev, description: content }));
-    };
+    // const handleDescriptionChange = (content: string) => {
+    //     setFormValues((prev) => ({ ...prev, description: content }));
+    // };
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -134,66 +136,12 @@ const CreateCityForm: React.FC = () => {
 
             <div>
                 <label className="block mb-2 font-medium">Опис міста</label>
-                <Editor
-                    apiKey={APP_ENV.APP_TINYMCE_KEY}
-                    value={formValues.description}
-                    init={{
-                        height: 450,
-                        // menubar: false,
-                        plugins: [
-                            "advlist", "anchor", "autolink", "charmap", "code", "fullscreen",
-                            "help", "image", "insertdatetime", "link", "lists", "media",
-                            "preview", "searchreplace", "table", "visualblocks",
-                        ],
-                        toolbar: "undo redo | styles | bold italic underline strikethrough | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image code",
-                        automatic_uploads: false,
-                        images_file_types: "jpg,jpeg,png,webp",
-                        paste_data_images: false,
-
-                        setup: (editor) => {
-                            editor.on("PastePostProcess", async (e: any) => {
-                                if (!e.node) return;
-
-                                // тимчасовий контейнер
-                                const div = document.createElement("div");
-                                div.innerHTML = e.node.innerHTML;
-
-                                const images = div.querySelectorAll("img");
-
-                                for (const img of images) {
-                                    try {
-                                        const oldUrl = img.getAttribute("src");
-                                        if (!oldUrl) continue;
-
-                                        console.log("oldUrl", oldUrl);
-                                        // ---- завантажуємо по URL ----
-                                        // const newUrl = await uploadImageByUrl(oldUrl);
-                                        //
-                                        // // ---- замінюємо src ----
-                                        //img.setAttribute("src", "https://content2.rozetka.com.ua/goods/images/big/415403568.jpg");
-                                    } catch (err) {
-                                        console.error("Image upload failed", err);
-                                    }
-                                }
-
-                                // оновлюємо вміст вставки
-                                e.node.innerHTML = div.innerHTML;
-                            });
-                        },
-
-
-
-                        images_upload_handler: async (blobInfo) => {
-
-                            console.log("Select blobInfo", blobInfo);
-                            //const file = blobInfo.blob();
-
-                            //const response = await saveImage({ imageFile: file }).unwrap();
-
-                            return "https://content2.rozetka.com.ua/goods/images/big/415403568.jpg";
-                        },
-                    }}
-                    onEditorChange={handleDescriptionChange}
+                <CityDescriptionEditor
+                    value={formValues.description!}
+                    onChange={(content) => setFormValues((p) => ({ ...p, description: content }))}
+                    onDescriptionImageIdsChange={(ids) =>
+                        setFormValues((p) => ({ ...p, descriptionImageIds: ids }))
+                    }
                 />
 
             </div>
