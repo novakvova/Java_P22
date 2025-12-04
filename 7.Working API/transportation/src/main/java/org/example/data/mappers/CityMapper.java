@@ -13,6 +13,6 @@ public interface CityMapper {
     @Mapping(source = "createdAt", target = "dateCreated", dateFormat = "yyyy-MM-dd HH:mm:ss")
     CityItemDTO toDto(CityEntity entity);
     @Mapping(target = "image", ignore = true)
-    @Mapping(target = "description", ignore = true)
+//    @Mapping(target = "description", ignore = true)
     CityEntity fromCreateDTO(CityCreateDTO dto);
 }

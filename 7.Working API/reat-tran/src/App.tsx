@@ -6,6 +6,8 @@ import UserHomePage from "./pages/user/UserHomePage";
 import RegisterPage from "./pages/account/RegisterPage";
 import CreateCountryPage from "./pages/country/CreateCountryPage";
 import CreateCityPage from "./pages/city/CreateCityPage";
+import CitiesListPage from "./pages/city/CitiesListPage";
+import CityDetailPage from "./pages/city/CityDetailPage";
 
 function App() {
 
@@ -18,6 +20,8 @@ function App() {
                     <Route path="/countries/create" element={<CreateCountryPage />} />
 
                     <Route path="cities">
+                        <Route index element={<CitiesListPage/>} />
+                        <Route path=":slug" element={<CityDetailPage/>} />
                         <Route path="create" element={<CreateCityPage />} />
                     </Route>
 

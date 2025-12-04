@@ -31,12 +31,17 @@ export const cityService = createApi({
                 };
             },
             invalidatesTags: ["Cities"]
-        })
+        }),
+        getBySlug: builder.query<ICityItem, string>({
+            query: (slug) => `/${slug}`,
+            providesTags: ["Cities"]
+        }),
 
     }),
 });
 
 export const {
     useGetCitiesQuery,
-    useCreateCityMutation
+    useCreateCityMutation,
+    useGetBySlugQuery
 } = cityService;
