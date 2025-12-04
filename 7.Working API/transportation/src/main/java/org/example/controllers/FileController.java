@@ -29,4 +29,13 @@ public class FileController {
 
         return ResponseEntity.ok(response);
     }
+
+    @PostMapping(value = "/saveImageFromUrl", consumes = "text/plain")
+    public ResponseEntity<SavedImageDTO> saveImageFromUrl(@RequestBody String url) {
+
+        String res = fileService.load(url);
+        SavedImageDTO response = imageDbService.save(res);
+
+        return ResponseEntity.ok(response);
+    }
 }

@@ -1,7 +1,7 @@
 import { Editor } from "@tinymce/tinymce-react";
 import { useRef } from "react";
 import { APP_ENV } from "../../env";
-import { useSaveImageMutation } from "../../services/fileService";
+import {useSaveImageFromUrlMutation, useSaveImageMutation} from "../../services/fileService";
 
 interface Props {
     value: string;
@@ -15,13 +15,17 @@ const CityDescriptionEditor: React.FC<Props> = ({
                                                     onDescriptionImageIdsChange,
                                                 }) => {
     const [saveImage] = useSaveImageMutation();
+    const [saveImageFromUrl] = useSaveImageFromUrlMutation();
     //@ts-ignore
     const editorRef = useRef<any>(null);
     const uploadedImagesRef = useRef<{ id: number; imageName: string }[]>([]);
 
-    const uploadImage = async (file: Blob) => {
-        //@ts-ignore
-        const response = await saveImage({ imageFile: file }).unwrap();
+    const uploadImage = async (data: Blob | string) => {
+        const response = await (
+            typeof data === "string"
+                ? saveImageFromUrl(data)
+                : saveImage({ imageFile: data as File })
+        ).unwrap();
 
         uploadedImagesRef.current.push({
             id: response.id,
@@ -76,31 +80,6 @@ const CityDescriptionEditor: React.FC<Props> = ({
                 paste_data_images: false,
 
                 setup: (editor) => {
-                    // editor.on("PastePostProcess", async (e) => {
-                    //     const html = e.node.innerHTML; // весь вставлений блок
-                    //     console.log("FULL PASTED BLOCK:", html);
-                    //
-                    //     const temp = document.createElement("div");
-                    //     temp.innerHTML = html;
-                    //
-                    //     const images = temp.querySelectorAll("img");
-                    //     console.log("IMAGES:", images);
-                    //     for (const img of images) {
-                    //         const src = img.getAttribute("src");
-                    //         if (!src) continue;
-                    //
-                    //     // Якщо це base64 або blob – завантажуємо
-                    //         if (src.startsWith("data:") || src.startsWith("blob:")) {
-                    //             const blob = await fetch(src).then((r) => r.blob());
-                    //             const { url } = await uploadImage(blob);
-                    //             img.setAttribute("src", url);
-                    //         }
-                    //     }
-                    //
-                    //     editor.setContent(temp.innerHTML);
-                    //     e.preventDefault(); // блокує дефолтну вставку
-                    // });
-
 
                     editor.on("Paste", async (e) => {
                         const items = e.clipboardData?.items;
@@ -112,55 +91,27 @@ const CityDescriptionEditor: React.FC<Props> = ({
                             if(item.kind !== "file") {
                                 item.getAsString(async (s) => {
                                     console.log("RAW HTML:", s);
-
-                                    // --- 1. Парсимо HTML у DOM ---
                                     const temp = document.createElement("div");
                                     temp.innerHTML = s;
 
-                                    // --- 2. Знаходимо всі <img> ---
                                     const imgs = temp.querySelectorAll("img");
 
                                     for (const img of imgs) {
                                         const src = img.getAttribute("src");
-                                        if (!src) continue;
+                                        if (!src || src.startsWith(APP_ENV.IMAGE_BASE_URL)) continue;
 
                                         console.log("FOUND IMG:", src);
 
-                                        // --- 3. Завантажуємо картинку якщо це base64 / blob ---
-                                        if (src.startsWith("data:") || src.startsWith("blob:")) {
+                                        const { url } = await uploadImage(src);
 
-                                            const blob = await fetch(src).then((r) => r.blob());
-                                            const file = new File([blob], "image.png", { type: blob.type });
-                                            const response = await saveImage({ imageFile: file }).unwrap();
-
-                                            //const { url } = await uploadImage(blob);
-                                            const serverUrl = `${APP_ENV.IMAGE_BASE_URL}large/${response.imageName}`;
-                                            console.log("UPLOAD RESULT:", serverUrl);
-
-                                            // --- 5. Замінюємо src на url з сервера ---
-                                            img.setAttribute("src", serverUrl);
-                                        }
+                                        img.setAttribute("src", url);
                                     }
 
-
-                                    // --- 7. Вставляємо оновлений HTML ---
                                     editor.insertContent(temp.innerHTML);
                                 });
                             }
-
-                            // if (item.type.indexOf("image") !== -1) {
-                            //     e.preventDefault();
-                            //     const file = item.getAsFile();
-                            //     if (!file) continue;
-                            //
-                            //     const { url } = await uploadImage(file);
-                            //     editor.insertContent(`<img src="${url}" />`);
-                            //
-                            // }
                         }
                     });
-
-
 
                     editor.on("NodeChange", async (e) => {
                         const node = e.element;
@@ -171,19 +122,15 @@ const CityDescriptionEditor: React.FC<Props> = ({
                         const src = node.getAttribute("src");
                         if (!src || src.startsWith(APP_ENV.IMAGE_BASE_URL)) return;
 
+                        console.log("Found external image:", src);
+
                         try {
-                            const blob = await fetch(src).then((r) => r.blob());
-                            const file = new File([blob], "image.png", { type: blob.type });
-                            const response = await saveImage({ imageFile: file }).unwrap();
+                            const res = await uploadImage(src);
 
-                            uploadedImagesRef.current.push({
-                                id: response.id,
-                                imageName: response.imageName,
-                            });
+                            console.log("Uploaded image:", res);
 
-                            const serverUrl = `${APP_ENV.IMAGE_BASE_URL}large/${response.imageName}`;
-                            node.setAttribute("src", serverUrl);
-                            node.setAttribute("data-id", String(response.id));
+                            node.setAttribute("src", res.url);
+                            node.setAttribute("data-id", String(res.id));
 
                             const editorBody = editor.getBody();
                             const updatedHtml = editorBody.innerHTML;
@@ -200,7 +147,6 @@ const CityDescriptionEditor: React.FC<Props> = ({
                 images_upload_handler: async (blobInfo) => {
                     const file = blobInfo.blob();
                     const { url } = await uploadImage(file);
-                    // console.log("Simple Upload " + url);
                     return url;
                 }
 

@@ -21,11 +21,23 @@ export const fileService = createApi({
                 };
             },
             invalidatesTags: ["Files"]
+        }),
+
+        saveImageFromUrl: builder.mutation<ISavedImage, string>({
+            query: (url) => {
+                return {
+                    url: '/saveImageFromUrl',
+                    method: "POST",
+                    body: url
+                };
+            },
+            invalidatesTags: ["Files"]
         })
 
     }),
 });
 
 export const {
-    useSaveImageMutation
+    useSaveImageMutation,
+    useSaveImageFromUrlMutation
 } = fileService;

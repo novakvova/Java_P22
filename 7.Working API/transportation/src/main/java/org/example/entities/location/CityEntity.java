@@ -22,7 +22,7 @@ public class CityEntity extends BaseEntity<Long> {
     @JoinColumn(name = "country_id", nullable = false)
     private CountryEntity country;
 
-    @Column(length = 10000)
+    @Column(length = 50000)
     private String description;
 
     //Кількість населення
