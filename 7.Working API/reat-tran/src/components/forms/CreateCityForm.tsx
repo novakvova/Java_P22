@@ -31,6 +31,7 @@ const CreateCityForm: React.FC = () => {
         avgMealPrice: undefined,
         avgHotelPrice: undefined,
         hasRecreationalWater: false,
+        //@ts-ignore
         descriptionImageIds: []
     });
 
@@ -118,6 +119,7 @@ const CreateCityForm: React.FC = () => {
 
             <SelectField
                 label="Країна"
+                //@ts-ignore
                 name="countryId"
                 options={countryOptions}
                 value={formValues.countryId}

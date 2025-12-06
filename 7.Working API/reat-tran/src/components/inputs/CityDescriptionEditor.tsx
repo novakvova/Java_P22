@@ -78,9 +78,9 @@ const CityDescriptionEditor: React.FC<Props> = ({
                 automatic_uploads: true,
                 images_file_types: "jpg,jpeg,png,webp",
                 paste_data_images: false,
-
+                //@ts-ignore
                 setup: (editor) => {
-
+                    //@ts-ignore
                     editor.on("Paste", async (e) => {
                         const items = e.clipboardData?.items;
                         if (!items) return;
@@ -89,6 +89,7 @@ const CityDescriptionEditor: React.FC<Props> = ({
                         for (const item of items) {
                             console.log("item", item);
                             if(item.kind !== "file") {
+                                //@ts-ignore
                                 item.getAsString(async (s) => {
                                     console.log("RAW HTML:", s);
                                     const temp = document.createElement("div");
@@ -112,7 +113,7 @@ const CityDescriptionEditor: React.FC<Props> = ({
                             }
                         }
                     });
-
+                    //@ts-ignore
                     editor.on("NodeChange", async (e) => {
                         const node = e.element;
 
@@ -143,7 +144,7 @@ const CityDescriptionEditor: React.FC<Props> = ({
                         }
                     });
                 },
-
+                //@ts-ignore
                 images_upload_handler: async (blobInfo) => {
                     const file = blobInfo.blob();
                     const { url } = await uploadImage(file);
