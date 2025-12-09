@@ -8,6 +8,15 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.example.mytaskmanager.dto.zadachi.ZadachaItemDTO;
+import com.example.mytaskmanager.network.RetrofitClient;
+
+import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
 public class MainActivity extends AppCompatActivity {
 
     @Override
@@ -20,5 +29,25 @@ public class MainActivity extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+
+        RetrofitClient
+                .getInstance()
+                .getZadachiApi()
+                .list()
+                .enqueue(new Callback<List<ZadachaItemDTO>>() {
+                    @Override
+                    public void onResponse(Call<List<ZadachaItemDTO>> call, Response<List<ZadachaItemDTO>> response) {
+                        if(response.isSuccessful())
+                        {
+                            List<ZadachaItemDTO> items = response.body();
+                            int count = items.size();
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<List<ZadachaItemDTO>> call, Throwable t) {
+
+                    }
+                });
     }
 }
