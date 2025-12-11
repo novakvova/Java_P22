@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="backgroundColor">#384c5e</color>
+    <color name="primaryColor">#113F67</color>
+    <color name="titleTextColor">#f2f8ff</color>
+    <color name="secondaryTextColor">#b6d0f0</color>
+    <color name="taskBgColor">#061929</color>
+    <color name="imageBorderColor">#5cbdf2</color>
+</resources>
