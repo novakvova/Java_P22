@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 namespace JustDoItApi.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
+    [Route("api/[controller]")]
     public class ZadachiController (IZadachiService zadachiService) : ControllerBase
     {
 

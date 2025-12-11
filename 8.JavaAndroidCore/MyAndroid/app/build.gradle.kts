@@ -47,4 +47,6 @@ dependencies {
     implementation("com.squareup.retrofit2:converter-gson:3.0.0")
     // https://mvnrepository.com/artifact/com.github.bumptech.glide/glide
     implementation("com.github.bumptech.glide:glide:5.0.5")
+    // https://mvnrepository.com/artifact/com.squareup.okhttp3/logging-interceptor
+    implementation("com.squareup.okhttp3:logging-interceptor:5.3.2")
 }

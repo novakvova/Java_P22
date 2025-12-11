@@ -7,6 +7,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.mytaskmanager.dto.zadachi.ZadachaItemDTO;
 import com.example.mytaskmanager.network.RetrofitClient;
@@ -19,6 +20,9 @@ import retrofit2.Response;
 
 public class MainActivity extends AppCompatActivity {
 
+    RecyclerView taskRecycler;
+    TaskAdapter adapter;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -30,24 +34,33 @@ public class MainActivity extends AppCompatActivity {
             return insets;
         });
 
-        RetrofitClient
-                .getInstance()
-                .getZadachiApi()
-                .list()
-                .enqueue(new Callback<List<ZadachaItemDTO>>() {
-                    @Override
-                    public void onResponse(Call<List<ZadachaItemDTO>> call, Response<List<ZadachaItemDTO>> response) {
-                        if(response.isSuccessful())
-                        {
-                            List<ZadachaItemDTO> items = response.body();
-                            int count = items.size();
-                        }
-                    }
+        taskRecycler = findViewById(R.id.taskRecycler);
 
-                    @Override
-                    public void onFailure(Call<List<ZadachaItemDTO>> call, Throwable t) {
+        adapter = new TaskAdapter();
+        taskRecycler.setAdapter(adapter);
+        taskRecycler.setLayoutManager(
+                new androidx.recyclerview.widget.LinearLayoutManager(this)
+        );
 
-                    }
-                });
+
+//        RetrofitClient
+//                .getInstance()
+//                .getZadachiApi()
+//                .list()
+//                .enqueue(new Callback<List<ZadachaItemDTO>>() {
+//                    @Override
+//                    public void onResponse(Call<List<ZadachaItemDTO>> call, Response<List<ZadachaItemDTO>> response) {
+//                        if(response.isSuccessful())
+//                        {
+//                            List<ZadachaItemDTO> items = response.body();
+//                            int count = items.size();
+//                        }
+//                    }
+//
+//                    @Override
+//                    public void onFailure(Call<List<ZadachaItemDTO>> call, Throwable t) {
+//
+//                    }
+//                });
     }
 }

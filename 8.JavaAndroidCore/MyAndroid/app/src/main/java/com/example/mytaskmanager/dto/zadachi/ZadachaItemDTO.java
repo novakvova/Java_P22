@@ -3,10 +3,12 @@ package com.example.mytaskmanager.dto.zadachi;
 public class ZadachaItemDTO {
     private int id;
     private String name;
+    private String image;
 
-    public ZadachaItemDTO(int id, String name) {
+    public ZadachaItemDTO(int id, String name, String image) {
         this.id = id;
         this.name = name;
+        this.image = image;
     }
 
     public int getId() {
@@ -24,4 +26,8 @@ public class ZadachaItemDTO {
     public void setName(String name) {
         this.name = name;
     }
+
+    public String getImage() { return image; }
+
+    public void setImage(String image) { this.image = image; }
 }
