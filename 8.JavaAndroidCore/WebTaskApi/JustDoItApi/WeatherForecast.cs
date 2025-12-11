@@ -1,4 +1,4 @@
-namespace WebTaskApi
+namespace JustDoItApi
 {
     public class WeatherForecast
     {
