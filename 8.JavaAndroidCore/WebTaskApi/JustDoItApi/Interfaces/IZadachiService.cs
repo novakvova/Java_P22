@@ -5,5 +5,5 @@ namespace JustDoItApi.Interfaces;
 public interface IZadachiService
 {
     Task<IEnumerable<ZadachaItemModel>> GetAllAsync();
-    Task CreateZadachyAsync(ZadachaCreateModel model);
+    Task<ZadachaItemModel> CreateZadachyAsync(ZadachaCreateModel model);
 }
