@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/addTaskRoot"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="16dp"
+    android:background="@color/backgroundColor"
+    tools:context=".AddTaskActivity">
+
+    <TextView
+        android:id="@+id/addTaskTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Нова задача"
+        android:textColor="@color/primaryColor"
+        android:textSize="28sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <EditText
+        android:id="@+id/taskTitleInput"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:hint="Назва задачі"
+        android:padding="12dp"
+        android:background="@drawable/task_bg"
+        android:textColor="@color/titleTextColor"
+        android:textColorHint="@color/titleTextColor"
+        app:layout_constraintTop_toBottomOf="@id/addTaskTitle"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0"
+        android:layout_marginTop="16dp" />
+
+    <ImageView
+        android:id="@+id/taskImagePreview"
+        android:layout_width="0dp"
+        android:layout_height="200dp"
+        android:scaleType="centerCrop"
+        android:background="@drawable/task_bg"
+        android:contentDescription="Task image preview"
+        app:layout_constraintTop_toBottomOf="@id/taskTitleInput"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="16dp"
+        tools:src="@drawable/ic_launcher_foreground" />
+
+    <Button
+        android:id="@+id/chooseImageButton"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Завантажити зображення"
+        android:backgroundTint="@color/primaryColor"
+        android:textColor="@color/titleTextColor"
+        app:layout_constraintTop_toBottomOf="@id/taskImagePreview"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="16dp" />
+
+    <Button
+        android:id="@+id/saveTaskButton"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:backgroundTint="@color/primaryColor"
+        android:onClick="onSaveClick"
+        android:text="Зберегти"
+        android:textColor="@color/titleTextColor"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/chooseImageButton" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
+

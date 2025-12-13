@@ -1,8 +1,12 @@
 package com.example.mytaskmanager;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 
 import androidx.activity.EdgeToEdge;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
@@ -12,16 +16,19 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.mytaskmanager.dto.zadachi.ZadachaItemDTO;
 import com.example.mytaskmanager.network.RetrofitClient;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends BaseActivity {
 
     RecyclerView taskRecycler;
     TaskAdapter adapter;
+
+    View addButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,32 +42,38 @@ public class MainActivity extends AppCompatActivity {
         });
 
         taskRecycler = findViewById(R.id.taskRecycler);
-
-        adapter = new TaskAdapter();
-        taskRecycler.setAdapter(adapter);
+        taskRecycler.setAdapter(new TaskAdapter(new ArrayList<>()));
         taskRecycler.setLayoutManager(
                 new androidx.recyclerview.widget.LinearLayoutManager(this)
         );
 
+        addButton = findViewById(R.id.addButton);
 
-//        RetrofitClient
-//                .getInstance()
-//                .getZadachiApi()
-//                .list()
-//                .enqueue(new Callback<List<ZadachaItemDTO>>() {
-//                    @Override
-//                    public void onResponse(Call<List<ZadachaItemDTO>> call, Response<List<ZadachaItemDTO>> response) {
-//                        if(response.isSuccessful())
-//                        {
-//                            List<ZadachaItemDTO> items = response.body();
-//                            int count = items.size();
-//                        }
-//                    }
-//
-//                    @Override
-//                    public void onFailure(Call<List<ZadachaItemDTO>> call, Throwable t) {
-//
-//                    }
-//                });
+        addButton.setOnClickListener(v ->
+                {
+                    goToAddTaskActivity();
+                }
+        );
+        loadTaskList();
     }
+
+    private void loadTaskList() {
+        RetrofitClient.getInstance().getZadachiApi().list()
+                .enqueue(new Callback<List<ZadachaItemDTO>>() {
+            @Override
+            public void onResponse(Call<List<ZadachaItemDTO>> call, Response<List<ZadachaItemDTO>> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    adapter = new TaskAdapter(response.body());
+                    taskRecycler.setAdapter(adapter);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<ZadachaItemDTO>> call, Throwable t) {
+                t.printStackTrace();
+            }
+        });
+    }
+
+
 }
