@@ -3,6 +3,7 @@ package com.example.mytaskmanager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -14,6 +15,7 @@ import com.bumptech.glide.Glide;
 import com.example.mytaskmanager.config.Config;
 import com.example.mytaskmanager.dto.zadachi.ZadachaItemDTO;
 import com.example.mytaskmanager.network.RetrofitClient;
+import com.example.mytaskmanager.zadacha.OnItemClickZadacha;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -26,10 +28,12 @@ import retrofit2.Response;
 public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.TaskViewHolder> {
 
     List<ZadachaItemDTO> taskList;
+    private final OnItemClickZadacha onEditListener;
 
-    public TaskAdapter(List<ZadachaItemDTO> taskList) {
+    public TaskAdapter(List<ZadachaItemDTO> taskList,
+                       OnItemClickZadacha onEditListener) {
         this.taskList = taskList;
-
+        this.onEditListener = onEditListener;
     }
 
     @NonNull
@@ -48,6 +52,8 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.TaskViewHolder
         Glide.with(holder.itemView.getContext())
                 .load(Config.IMAGES_URL + "400_" + item.getImage())
                 .into(holder.taskImage);
+
+        holder.edit_btn.setOnClickListener(x -> onEditListener.onItemClick(item));
     }
 
     @Override
@@ -66,12 +72,14 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.TaskViewHolder
         TextView taskText;
         CheckBox taskCheckBox;
         ImageView taskImage;
+        public Button edit_btn;
 
         public TaskViewHolder(@NonNull View itemView) {
             super(itemView);
             taskText = itemView.findViewById(R.id.taskText);
             taskCheckBox = itemView.findViewById(R.id.taskCheckBox);
             taskImage = itemView.findViewById(R.id.taskImage);
+            edit_btn=itemView.findViewById(R.id.edit_btn);
         }
     }
 

@@ -3,31 +3,25 @@ package com.example.mytaskmanager.utils;
 import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
-import android.provider.OpenableColumns;
+import android.provider.MediaStore;
 
 public class FileUtil {
 
-    public static String getFileName(Context context, Uri uri) {
-        String name = null;
+    public static String getImagePath(Context context, Uri uri) {
+        String[] projection = { MediaStore.Images.Media.DATA };
 
-        if ("content".equals(uri.getScheme())) {
-            try (Cursor cursor = context.getContentResolver()
-                    .query(uri, null, null, null, null)) {
+        Cursor cursor = context.getContentResolver()
+                .query(uri, projection, null, null, null);
 
-                if (cursor != null && cursor.moveToFirst()) {
-                    int index =
-                            cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME);
-                    if (index >= 0) {
-                        name = cursor.getString(index);
-                    }
-                }
-            }
+        if (cursor != null) {
+            int columnIndex =
+                    cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+            cursor.moveToFirst();
+            String imagePath = cursor.getString(columnIndex);
+            cursor.close();
+            return imagePath;
         }
 
-        if (name == null) {
-            name = "image_" + System.currentTimeMillis() + ".jpg";
-        }
-
-        return name;
+        return null;
     }
 }

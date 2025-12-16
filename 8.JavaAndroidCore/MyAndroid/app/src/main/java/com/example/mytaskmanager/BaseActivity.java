@@ -6,7 +6,13 @@ import android.view.MenuItem;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.mytaskmanager.utils.CommonUtils;
+
 public class BaseActivity extends AppCompatActivity {
+
+    public BaseActivity() {
+        CommonUtils.setContext(this);
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

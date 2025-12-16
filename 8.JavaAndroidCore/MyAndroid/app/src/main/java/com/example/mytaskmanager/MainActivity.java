@@ -5,9 +5,6 @@ import android.os.Bundle;
 import android.view.View;
 
 import androidx.activity.EdgeToEdge;
-import androidx.activity.result.ActivityResultLauncher;
-import androidx.activity.result.contract.ActivityResultContracts;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
@@ -15,6 +12,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.mytaskmanager.dto.zadachi.ZadachaItemDTO;
 import com.example.mytaskmanager.network.RetrofitClient;
+import com.example.mytaskmanager.utils.CommonUtils;
+import com.example.mytaskmanager.utils.MyLogger;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -42,7 +41,8 @@ public class MainActivity extends BaseActivity {
         });
 
         taskRecycler = findViewById(R.id.taskRecycler);
-        taskRecycler.setAdapter(new TaskAdapter(new ArrayList<>()));
+        taskRecycler.setAdapter(new TaskAdapter(new ArrayList<>(),
+                MainActivity.this::onClickEditZadatch));
         taskRecycler.setLayoutManager(
                 new androidx.recyclerview.widget.LinearLayoutManager(this)
         );
@@ -54,7 +54,9 @@ public class MainActivity extends BaseActivity {
                     goToAddTaskActivity();
                 }
         );
+        CommonUtils.showLoading();
         loadTaskList();
+
     }
 
     private void loadTaskList() {
@@ -63,8 +65,10 @@ public class MainActivity extends BaseActivity {
             @Override
             public void onResponse(Call<List<ZadachaItemDTO>> call, Response<List<ZadachaItemDTO>> response) {
                 if (response.isSuccessful() && response.body() != null) {
-                    adapter = new TaskAdapter(response.body());
+                    adapter = new TaskAdapter(response.body(),
+                            MainActivity.this::onClickEditZadatch);
                     taskRecycler.setAdapter(adapter);
+                    CommonUtils.hideLoading();
                 }
             }
 
@@ -75,5 +79,13 @@ public class MainActivity extends BaseActivity {
         });
     }
 
+    private void onClickEditZadatch(ZadachaItemDTO item) {
+        //MyLogger.toast(MainActivity.this, "Зміна задачі");
+        Intent intent = new Intent(this, EditTaskActivity.class);
+        intent.putExtra("task_id", item.getId());
+        intent.putExtra("task_name", item.getName());
+        intent.putExtra("task_image", item.getImage());
+        this.startActivity(intent);
+    }
 
 }

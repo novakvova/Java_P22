@@ -12,6 +12,7 @@ public class ZadachiController(IZadachiService zadachiService) : ControllerBase
     [HttpGet()]
     public async Task<IActionResult> Get()
     {
+        Thread.Sleep(2000);
         var items = await zadachiService.GetAllAsync();
 
         return Ok(items);
