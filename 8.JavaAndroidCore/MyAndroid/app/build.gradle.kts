@@ -49,4 +49,5 @@ dependencies {
     implementation("com.github.bumptech.glide:glide:5.0.5")
     // https://mvnrepository.com/artifact/com.squareup.okhttp3/logging-interceptor
     implementation("com.squareup.okhttp3:logging-interceptor:5.3.2")
+    implementation("com.github.yalantis:ucrop:2.2.11")
 }

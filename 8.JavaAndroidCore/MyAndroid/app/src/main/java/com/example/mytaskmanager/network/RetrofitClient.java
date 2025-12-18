@@ -41,4 +41,8 @@ public class RetrofitClient {
     public ZadachiApi getZadachiApi() {
         return retrofit.create(ZadachiApi.class);
     }
+
+    public AuthApi getAuthApi() {
+        return retrofit.create(AuthApi.class);
+    }
 }
