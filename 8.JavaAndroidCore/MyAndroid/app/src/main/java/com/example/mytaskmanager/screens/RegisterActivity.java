@@ -112,8 +112,8 @@ public class RegisterActivity extends BaseActivity {
         findViewById(R.id.selectImage).setOnClickListener(v ->
                 imageCropper.pick(uri -> {
                     Log.d("---URL image----", uri.getPath());
-//                    selectedImageUri = uri;
-//                    imagePreview.setImageURI(uri);
+                    selectedImageUri = uri;
+                    imagePreview.setImageURI(uri);
                 })
         );
     }

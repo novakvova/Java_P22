@@ -26,6 +26,10 @@
             android:name=".screens.AddTaskActivity"
             android:exported="false" />
         <activity
+            android:name="com.yalantis.ucrop.UCropActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
+        <activity
             android:name=".screens.MainActivity"
             android:exported="true">
             <intent-filter>
