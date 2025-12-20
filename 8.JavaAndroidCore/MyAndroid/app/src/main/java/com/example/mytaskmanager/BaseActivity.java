@@ -6,6 +6,8 @@ import android.view.MenuItem;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.mytaskmanager.screens.AddTaskActivity;
+import com.example.mytaskmanager.screens.MainActivity;
 import com.example.mytaskmanager.screens.RegisterActivity;
 import com.example.mytaskmanager.utils.CommonUtils;
 

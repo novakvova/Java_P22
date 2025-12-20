@@ -1,4 +1,4 @@
-package com.example.mytaskmanager;
+package com.example.mytaskmanager.screens;
 
 import android.net.Uri;
 import android.os.Bundle;
@@ -12,7 +12,8 @@ import androidx.activity.result.contract.ActivityResultContracts;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
-import com.example.mytaskmanager.application.HomeApplication;
+import com.example.mytaskmanager.BaseActivity;
+import com.example.mytaskmanager.R;
 import com.example.mytaskmanager.config.Config;
 import com.example.mytaskmanager.network.RetrofitClient;
 import com.example.mytaskmanager.utils.FileUtil;

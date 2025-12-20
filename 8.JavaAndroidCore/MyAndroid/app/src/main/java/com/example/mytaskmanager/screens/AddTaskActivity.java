@@ -1,4 +1,4 @@
-package com.example.mytaskmanager;
+package com.example.mytaskmanager.screens;
 
 import android.database.Cursor;
 import android.net.Uri;
@@ -15,6 +15,8 @@ import androidx.activity.result.contract.ActivityResultContracts;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
+import com.example.mytaskmanager.BaseActivity;
+import com.example.mytaskmanager.R;
 import com.example.mytaskmanager.config.Config;
 import com.example.mytaskmanager.dto.zadachi.ZadachaItemDTO;
 import com.example.mytaskmanager.network.RetrofitClient;

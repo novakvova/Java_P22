@@ -1,4 +1,4 @@
-package com.example.mytaskmanager;
+package com.example.mytaskmanager.screens;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -10,10 +10,12 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.mytaskmanager.BaseActivity;
+import com.example.mytaskmanager.R;
+import com.example.mytaskmanager.TaskAdapter;
 import com.example.mytaskmanager.dto.zadachi.ZadachaItemDTO;
 import com.example.mytaskmanager.network.RetrofitClient;
 import com.example.mytaskmanager.utils.CommonUtils;
-import com.example.mytaskmanager.utils.MyLogger;
 
 import java.util.ArrayList;
 import java.util.List;

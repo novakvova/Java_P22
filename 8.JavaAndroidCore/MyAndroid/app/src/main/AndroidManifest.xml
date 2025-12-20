@@ -15,18 +15,18 @@
         android:networkSecurityConfig="@xml/network_security_config"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.MyTaskManager">
+        android:theme="@style/Theme.JustDoIt">
         <activity
             android:name=".screens.RegisterActivity"
             android:exported="false" />
         <activity
-            android:name=".EditTaskActivity"
+            android:name=".screens.EditTaskActivity"
             android:exported="false" />
         <activity
-            android:name=".AddTaskActivity"
+            android:name=".screens.AddTaskActivity"
             android:exported="false" />
         <activity
-            android:name=".MainActivity"
+            android:name=".screens.MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
