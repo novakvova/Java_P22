@@ -9,7 +9,10 @@ import android.widget.ImageView;
 
 import com.example.mytaskmanager.BaseActivity;
 import com.example.mytaskmanager.R;
+import com.example.mytaskmanager.application.HomeApplication;
+import com.example.mytaskmanager.dto.auth.AuthResponse;
 import com.example.mytaskmanager.network.RetrofitClient;
+import com.example.mytaskmanager.security.JwtSecurityService;
 import com.example.mytaskmanager.utils.CommonUtils;
 import com.example.mytaskmanager.utils.FileUtil;
 import com.example.mytaskmanager.utils.ImagePickerCropper;
@@ -169,14 +172,17 @@ public class RegisterActivity extends BaseActivity {
         RetrofitClient.getInstance()
                 .getAuthApi()
                 .register(fnPart, lnPart, emPart, pwPart, imagePart)
-                .enqueue(new Callback<Void>() {
+                .enqueue(new Callback<AuthResponse>() {
 
                     @Override
-                    public void onResponse(Call<Void> call, Response<Void> response) {
+                    public void onResponse(Call<AuthResponse> call, Response<AuthResponse> response) {
                         CommonUtils.hideLoading();
-
                         if (response.isSuccessful()) {
                             MyLogger.toast("Реєстрація успішна");
+                            String token = response.body().getToken();
+                            HomeApplication.getInstance().saveJwtToken(token);
+//                            JwtSecurityService jwtService = HomeApplication.getInstance();
+//                            jwtService.saveJwtToken(token);
                             finish();
                         } else {
                             MyLogger.toast("Помилка сервера: " + response.code());
@@ -184,7 +190,7 @@ public class RegisterActivity extends BaseActivity {
                     }
 
                     @Override
-                    public void onFailure(Call<Void> call, Throwable t) {
+                    public void onFailure(Call<AuthResponse> call, Throwable t) {
                         CommonUtils.hideLoading();
                         MyLogger.toast("Помилка: " + t.getMessage());
                     }
