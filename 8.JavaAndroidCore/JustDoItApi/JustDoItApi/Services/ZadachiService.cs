@@ -7,13 +7,17 @@ using Microsoft.EntityFrameworkCore;
 
 namespace JustDoItApi.Services;
 
-public class ZadachiService(AppDbContext context, IMapper mapper, IImageService imageService) : IZadachiService
+public class ZadachiService(AppDbContext context, 
+    IMapper mapper, IImageService imageService,
+    IIdentityService identityService) : IZadachiService
 {
-    public async Task<ZadachaItemModel> CreateZadachyAsync(ZadachaCreateModel model)
+    public async Task<ZadachaItemModel> CreateZadachyAsync(ZadachaCreateModel model, IFormFile image)
     {
+        var userId = await identityService.GetUserIdAsync();
         var zadachaEntity = mapper.Map<ZadachaEntity>(model);
 
-        zadachaEntity.Image = await imageService.SaveImageAsync(model.Image);
+        zadachaEntity.Image = await imageService.SaveImageAsync(image);
+        zadachaEntity.UserId = userId;
 
         context.Zadachi.Add(zadachaEntity);
         await context.SaveChangesAsync();
@@ -24,7 +28,10 @@ public class ZadachiService(AppDbContext context, IMapper mapper, IImageService 
 
     public async Task<bool> DeleteRangeZadachiAsync(List<long> ids)
     {
-        var zadachiEntities = context.Zadachi.Where(x => ids.Contains(x.Id)).ToList();
+        var userId = await identityService.GetUserIdAsync();
+        var zadachiEntities = context.Zadachi
+            .Where(x => x.UserId == userId)
+            .Where(x => ids.Contains(x.Id)).ToList();
         if (zadachiEntities.Count == 0)
         {
             return false;
@@ -42,7 +49,10 @@ public class ZadachiService(AppDbContext context, IMapper mapper, IImageService 
 
     public async Task<bool> DeleteZadachyAsync(long id)
     {
-        var zadachaEntity = await context.Zadachi.FirstOrDefaultAsync(x => x.Id == id);
+        var userId = await identityService.GetUserIdAsync();
+        var zadachaEntity = await context.Zadachi
+            .Where(x => x.UserId == userId)
+            .FirstOrDefaultAsync(x => x.Id == id);
         if (zadachaEntity == null)
         {
             return false;
@@ -57,14 +67,20 @@ public class ZadachiService(AppDbContext context, IMapper mapper, IImageService 
 
     public async Task<IEnumerable<ZadachaItemModel>> GetAllAsync()
     {
-        var zadachy = await context.Zadachi.ToListAsync();
+        var userId = await identityService.GetUserIdAsync();
+        var zadachy = await context.Zadachi
+            .Where(x => x.UserId == userId)
+            .ToListAsync();
         var zadachyModels = mapper.Map<IEnumerable<ZadachaItemModel>>(zadachy);
         return zadachyModels;
     }
 
     public async Task<bool> UpdateZadachyAsync(ZadachaUpdateModel model)
     {
-        var zadachaEntity = context.Zadachi.FirstOrDefault(x => x.Id == model.Id);
+        var userId = await identityService.GetUserIdAsync();
+        var zadachaEntity = context.Zadachi
+            .Where(x => x.UserId == userId)
+            .FirstOrDefault(x => x.Id == model.Id);
         if (zadachaEntity == null)
         {
             return false;

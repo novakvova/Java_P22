@@ -1,11 +1,13 @@
 using JustDoItApi.Interfaces;
 using JustDoItApi.Models.Zadachi;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace JustDoItApi.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
+[Authorize]
 public class ZadachiController(IZadachiService zadachiService) : ControllerBase
 {
 
@@ -19,9 +21,9 @@ public class ZadachiController(IZadachiService zadachiService) : ControllerBase
     }
 
     [HttpPost()]
-    public async Task<IActionResult> Post([FromForm] ZadachaCreateModel model)
+    public async Task<IActionResult> Post([FromForm] ZadachaCreateModel model, IFormFile image)
     {
-        var res = await zadachiService.CreateZadachyAsync(model);
+        var res = await zadachiService.CreateZadachyAsync(model, image);
         return Ok(res);
     }
 
