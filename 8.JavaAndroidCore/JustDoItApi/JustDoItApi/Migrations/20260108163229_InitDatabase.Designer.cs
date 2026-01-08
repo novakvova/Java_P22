@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace JustDoItApi.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20260106162728_Add Identity")]
-    partial class AddIdentity
+    [Migration("20260108163229_InitDatabase")]
+    partial class InitDatabase
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -175,7 +175,12 @@ namespace JustDoItApi.Migrations
                         .HasMaxLength(250)
                         .HasColumnType("character varying(250)");
 
+                    b.Property<long>("UserId")
+                        .HasColumnType("bigint");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("tbl_zadacha");
                 });
@@ -287,6 +292,17 @@ namespace JustDoItApi.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("JustDoItApi.Entities.ZadachaEntity", b =>
+                {
+                    b.HasOne("JustDoItApi.Entities.Identity.UserEntity", "User")
+                        .WithMany("Zadachas")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<long>", b =>
                 {
                     b.HasOne("JustDoItApi.Entities.Identity.RoleEntity", null)
@@ -331,6 +347,8 @@ namespace JustDoItApi.Migrations
             modelBuilder.Entity("JustDoItApi.Entities.Identity.UserEntity", b =>
                 {
                     b.Navigation("UserRoles");
+
+                    b.Navigation("Zadachas");
                 });
 #pragma warning restore 612, 618
         }

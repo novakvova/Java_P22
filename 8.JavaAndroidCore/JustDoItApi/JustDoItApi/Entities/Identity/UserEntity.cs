@@ -10,4 +10,5 @@ public class UserEntity : IdentityUser<long>
     public string? LastName { get; set; } = string.Empty;
     public string? Image { get; set; } = string.Empty;
     public virtual ICollection<UserRoleEntity>? UserRoles { get; set; }
+    public virtual ICollection<ZadachaEntity>? Zadachas { get; set; }
 }
