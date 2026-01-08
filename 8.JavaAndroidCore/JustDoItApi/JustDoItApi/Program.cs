@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.FileProviders;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -14,15 +15,12 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 
 builder.Services.AddControllers();
-// Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
-builder.Services.AddOpenApi();
-
-builder.Services.AddSwaggerGen();
 
 builder.Services.AddScoped<IZadachiService, ZadachiService>();
 builder.Services.AddScoped<IImageService, ImageService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IJWTTokenService, JWTTokenService>();
+builder.Services.AddScoped<IIdentityService, IdentityService>();
 
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection"))
@@ -59,6 +57,41 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
+builder.Services.AddOpenApi(options =>
+{
+    options.AddDocumentTransformer((document, context, cancellationToken) =>
+    {
+        // Ensure instances exist
+        document.Components ??= new OpenApiComponents();
+        document.Components.SecuritySchemes ??= new Dictionary<string, IOpenApiSecurityScheme>();
+
+        document.Components.SecuritySchemes["Bearer"] = new OpenApiSecurityScheme
+        {
+            Type = SecuritySchemeType.Http,
+            Scheme = "bearer",
+            BearerFormat = "JWT",
+            In = ParameterLocation.Header,
+            Name = "Authorization",
+            Description = "JWT Authorization header using the Bearer scheme. Example: \"Bearer {token}\""
+        };
+
+        // Apply security requirement globally
+        document.Security = [
+            new OpenApiSecurityRequirement
+            {
+                {
+                    new OpenApiSecuritySchemeReference("Bearer"),
+                    []
+                }
+            }
+        ];
+
+        document.SetReferenceHostDocument();
+
+        return Task.CompletedTask;
+    });
+});
+
 var app = builder.Build();
 
 var dir = builder.Configuration["ImagesDir"];
@@ -71,8 +104,15 @@ app.UseStaticFiles(new StaticFileOptions
     RequestPath = $"/{dir}"
 });
 
-app.UseSwagger();
-app.UseSwaggerUI();
+app.MapOpenApi();
+
+app.UseSwaggerUI(options =>
+{
+    options.SwaggerEndpoint("/openapi/v1.json", "v1");
+    options.OAuthUsePkce();
+});
+
+app.UseHttpsRedirection();
 
 app.UseAuthentication();
 app.UseAuthorization();
