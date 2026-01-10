@@ -7,12 +7,12 @@ server_up() {
     docker pull novakvova/task-api:latest
     docker stop task-api_container || true
     docker rm task-api_container || true
-    docker run -d --restart=always -v /volumes/pizushi-asp/images:/app/images --name task-api_container -p 4179:8080 novakvova/task-api
+    docker run -d --restart=always -v /volumes/pizushi-asp/images:/app/images -v /volumes/pizushi-asp/certs:/https -e ASPNETCORE_Kestrel__Certificates__Default__Password=StrongPassword123 --name task-api_container -p 4179:8080 novakvova/task-api
 }
 
 start_containers() {
     echo "Containers start..."
-    docker run -d --restart=always -v /volumes/pizushi-asp/images:/app/images --name task-api_container -p 4179:8080 novakvova/task-api
+    docker run -d --restart=always -v /volumes/pizushi-asp/images:/app/images -v /volumes/pizushi-asp/certs:/https -e ASPNETCORE_Kestrel__Certificates__Default__Password=StrongPassword123 --name task-api_container -p 4179:8080 novakvova/task-api
 }
 
 stop_containers() {
@@ -25,7 +25,7 @@ restart_containers() {
     echo "Containers restart..."
     docker stop task-api_container || true
     docker rm task-api_container || true
-    docker run -d --restart=always -v /volumes/pizushi-asp/images:/app/images --name task-api_container -p 4179:8080 novakvova/task-api
+    docker run -d --restart=always -v /volumes/pizushi-asp/images:/app/images -v /volumes/pizushi-asp/certs:/https -e ASPNETCORE_Kestrel__Certificates__Default__Password=StrongPassword123 --name task-api_container -p 4179:8080 novakvova/task-api
 }
 
 echo "Choose action:"

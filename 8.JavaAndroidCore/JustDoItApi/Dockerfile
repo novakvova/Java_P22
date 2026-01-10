@@ -19,5 +19,9 @@ WORKDIR /app
 # Копіюємо додаток з етапу побудови
 COPY --from=build /app .
 
+# HTTPS
+ENV ASPNETCORE_URLS=https://0.0.0.0:8080
+ENV ASPNETCORE_Kestrel__Certificates__Default__Path=/https/cert.pfx
+
 # Запускаємо додаток
 ENTRYPOINT ["dotnet", "JustDoItApi.dll"]
