@@ -100,13 +100,13 @@ builder.Services.AddOpenApi(options =>
     });
 });
 
-builder.Services.Configure<FormOptions>(options =>
-{
-    options.ValueCountLimit = int.MaxValue;
-    options.KeyLengthLimit = int.MaxValue;
-    //options.KeyCountLimit = int.MaxValue;   // sometimes useful
-    options.MultipartBodyLengthLimit = 100_000_000; // 100 MB
-});
+//builder.Services.Configure<FormOptions>(options =>
+//{
+//    options.ValueCountLimit = int.MaxValue;
+//    options.KeyLengthLimit = int.MaxValue;
+//    //options.KeyCountLimit = int.MaxValue;   // sometimes useful
+//    options.MultipartBodyLengthLimit = 100_000_000; // 100 MB
+//});
 
 
 var app = builder.Build();

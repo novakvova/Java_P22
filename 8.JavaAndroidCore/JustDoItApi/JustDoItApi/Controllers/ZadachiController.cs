@@ -21,9 +21,10 @@ public class ZadachiController(IZadachiService zadachiService) : ControllerBase
     }
 
     [HttpPost()]
-    public async Task<IActionResult> Post([FromForm] ZadachaCreateModel model, IFormFile image)
+    [Consumes("multipart/form-data")]
+    public async Task<IActionResult> Post([FromForm] ZadachaCreateModel model)
     {
-        var res = await zadachiService.CreateZadachyAsync(model, image);
+        var res = await zadachiService.CreateZadachyAsync(model);
         return Ok(res);
     }
 
