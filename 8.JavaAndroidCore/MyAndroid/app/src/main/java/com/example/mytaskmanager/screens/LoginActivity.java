@@ -102,4 +102,8 @@ public class LoginActivity extends BaseActivity {
                     }
                 });
     }
+
+    public void onGoToRegisterClick(View view) {
+        goToRegistration();
+    }
 }

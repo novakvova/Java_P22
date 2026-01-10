@@ -24,6 +24,7 @@ public class RetrofitClient {
                 .connectTimeout(20, TimeUnit.SECONDS)
                 .writeTimeout(20, TimeUnit.SECONDS)
                 .readTimeout(20, TimeUnit.SECONDS)
+                .addInterceptor(new AuthInterceptor())
                 .addInterceptor(logging); // <<< додано логування
         retrofit = new Retrofit.Builder()
                 .baseUrl(Config.BASE_URL)
