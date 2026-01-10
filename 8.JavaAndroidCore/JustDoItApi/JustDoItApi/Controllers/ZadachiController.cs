@@ -11,7 +11,7 @@ namespace JustDoItApi.Controllers;
 public class ZadachiController(IZadachiService zadachiService) : ControllerBase
 {
 
-    [HttpGet()]
+    [HttpGet]
     public async Task<IActionResult> Get()
     {
         Thread.Sleep(2000);
@@ -20,7 +20,7 @@ public class ZadachiController(IZadachiService zadachiService) : ControllerBase
         return Ok(items);
     }
 
-    [HttpPost()]
+    [HttpPost]
     [Consumes("multipart/form-data")]
     public async Task<IActionResult> Post([FromForm] ZadachaCreateModel model)
     {
@@ -50,7 +50,8 @@ public class ZadachiController(IZadachiService zadachiService) : ControllerBase
         return Ok();
     }
 
-    [HttpPut()]
+    [HttpPut]
+    [Consumes("multipart/form-data")]
     public async Task<IActionResult> Put([FromForm] ZadachaUpdateModel model)
     {
         var res = await zadachiService.UpdateZadachyAsync(model);
