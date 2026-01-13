@@ -3,6 +3,7 @@ package com.example.mytaskmanager.screens;
 import android.os.Bundle;
 import android.view.View;
 
+import com.example.mytaskmanager.AuthActivity;
 import com.example.mytaskmanager.BaseActivity;
 import com.example.mytaskmanager.R;
 import com.example.mytaskmanager.application.HomeApplication;
@@ -24,7 +25,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class LoginActivity extends BaseActivity {
+public class LoginActivity extends AuthActivity {
 
     private TextInputLayout emailLayout, passwordLayout;
     private TextInputEditText emailInput, passwordInput;

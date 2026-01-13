@@ -7,6 +7,7 @@ import android.view.View;
 import android.widget.ImageView;
 
 
+import com.example.mytaskmanager.AuthActivity;
 import com.example.mytaskmanager.BaseActivity;
 import com.example.mytaskmanager.R;
 import com.example.mytaskmanager.application.HomeApplication;
@@ -35,7 +36,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class RegisterActivity extends BaseActivity {
+public class RegisterActivity extends AuthActivity {
 
     private TextInputLayout firstNameLayout, lastNameLayout, emailLayout, passwordLayout;
     private TextInputEditText firstNameInput, lastNameInput, emailInput, passwordInput;
