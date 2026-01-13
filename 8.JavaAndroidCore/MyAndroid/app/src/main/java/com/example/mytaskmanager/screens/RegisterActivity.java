@@ -184,6 +184,7 @@ public class RegisterActivity extends AuthActivity {
                             HomeApplication.getInstance().saveJwtToken(token);
 //                            JwtSecurityService jwtService = HomeApplication.getInstance();
 //                            jwtService.saveJwtToken(token);
+                            goToMainActivity();
                             finish();
                         } else {
                             MyLogger.toast("Помилка сервера: " + response.code());

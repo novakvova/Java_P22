@@ -1,5 +1,7 @@
 package com.example.mytaskmanager;
 
+import android.app.AlertDialog;
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -54,6 +56,19 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.TaskViewHolder
                 .into(holder.taskImage);
 
         holder.edit_btn.setOnClickListener(x -> onEditListener.onItemClick(item));
+
+        holder.deleteButton.setOnClickListener(x->{
+            Context context = holder.itemView.getContext();
+
+            new AlertDialog.Builder(context)
+                    .setTitle("Точно видалити цю задачу?")
+                    .setMessage("Ви видаляєте назавжди")
+                    .setPositiveButton("Видалити", (dialog, which) -> {
+                        deleteTask(item.getId(), holder.getAdapterPosition());
+                    })
+                    .setNegativeButton("Скасувати", null)
+                    .show();
+        });
     }
 
     @Override
@@ -66,6 +81,26 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.TaskViewHolder
         notifyItemMoved(from, to);
     }
 
+    private void deleteTask(long id, int position){
+        RetrofitClient.getInstance()
+                .getZadachiApi()
+                .delete(id)
+                .enqueue(new Callback<Void>() {
+                    @Override
+                    public void onResponse(Call<Void> call, Response<Void> response) {
+                        if(response.isSuccessful()){
+                            taskList.remove(position);
+                            notifyItemRemoved(position);
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<Void> call, Throwable t) {
+                        t.printStackTrace();
+                    }
+                });
+    }
+
 
     static class TaskViewHolder extends RecyclerView.ViewHolder {
 
@@ -73,6 +108,7 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.TaskViewHolder
         CheckBox taskCheckBox;
         ImageView taskImage;
         public Button edit_btn;
+        public View deleteButton;
 
         public TaskViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -80,6 +116,7 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.TaskViewHolder
             taskCheckBox = itemView.findViewById(R.id.taskCheckBox);
             taskImage = itemView.findViewById(R.id.taskImage);
             edit_btn=itemView.findViewById(R.id.edit_btn);
+            deleteButton = itemView.findViewById(R.id.delete_btn);
         }
     }
 

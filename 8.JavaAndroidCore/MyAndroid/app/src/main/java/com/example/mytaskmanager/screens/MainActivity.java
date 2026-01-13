@@ -56,7 +56,7 @@ public class MainActivity extends BaseActivity {
         addButton = findViewById(R.id.addButton);
 
         accountButton = findViewById(R.id.accountButton);
-        accountButton.setOnClickListener(v -> goToRegistration());
+        accountButton.setOnClickListener(v -> goToLogin());
 
         addButton.setOnClickListener(v ->
                 {
